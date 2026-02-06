@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noah Harrison | Mechanical Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111114;
+            --bg-card: #16161a;
+            --bg-card-hover: #1c1c21;
+            --border: #2a2a30;
+            --text-primary: #e8e8ec;
+            --text-secondary: #8a8a96;
+            --text-muted: #5a5a66;
+            --accent: #4a9eff;
+            --accent-glow: rgba(74, 158, 255, 0.15);
+            --accent-secondary: #64ffda;
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'DM Sans', system-ui, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- NAV --- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 11, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            transition: color 0.3s ease;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* --- HERO --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-label {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            padding: 0.4rem 1rem;
+            border: 1px solid rgba(74, 158, 255, 0.25);
+            border-radius: 100px;
+            animation: fadeInUp 0.8s ease both;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 600;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.15s both;
+        }
+
+        .hero h1 .accent {
+            color: var(--accent);
+        }
+
+        .hero-description {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 550px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease 0.45s both;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.75rem;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: #5eadff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(74, 158, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-secondary);
+            background: var(--bg-card);
+            transform: translateY(-2px);
+        }
+
+        /* --- SECTIONS --- */
+        section {
+            padding: 6rem 2rem;
+        }
+
+        .section-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 2px;
+            background: var(--accent);
+            margin-top: 1.25rem;
+            border-radius: 2px;
+        }
+
+        /* --- ABOUT --- */
+        #about {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .about-text p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 1.25rem;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(74, 158, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* --- PROJECTS --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.75rem;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .project-card:hover {
+            border-color: rgba(74, 158, 255, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 220px;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .project-placeholder {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        .project-info {
+            padding: 1.75rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.7rem;
+            border-radius: 100px;
+            background: var(--accent-glow);
+            color: var(--accent);
+            border: 1px solid rgba(74, 158, 255, 0.15);
+        }
+
+        .project-title {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+
+        .project-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: gap 0.3s ease;
+        }
+
+        .project-link:hover {
+            gap: 0.7rem;
+        }
+
+        .project-link .arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .project-link:hover .arrow {
+            transform: translateX(3px);
+        }
+
+        /* --- SKILLS --- */
+        #skills {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-category {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .skill-category:hover {
+            border-color: rgba(74, 158, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .skill-icon {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .skill-category h3 {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .skill-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .skill-list li {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .skill-list li::before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* --- CONTACT --- */
+        .contact-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-content p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            border-color: var(--accent);
+            background: var(--accent-glow);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.25rem;
+            }
+
+            .nav-links {
+                gap: 1.25rem;
+            }
+
+            .nav-links a {
+                font-size: 0.8rem;
+            }
+
+            .hero {
+                padding: 5rem 1.5rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="nav-logo">NH</a>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-label">Mechanical Engineering</span>
+            <h1>Noah <span class="accent">Harrison</span></h1>
+            <p class="hero-description">
+                Mechanical engineering student at Western Michigan University with 3+ years of hands-on CNC machining experience. I bridge the gap between design and manufacturing — bringing both shop floor knowledge and engineering analysis to every project.
+            </p>
+            <div class="hero-cta">
+                <a href="#projects" class="btn btn-primary">View Projects</a>
+                <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <p class="section-label">Background</p>
+                <h2 class="section-title">About Me</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="about-grid">
+                <div class="about-text reveal">
+                    <p>
+                        I'm a mechanical engineering student at Western Michigan University with a minor in mathematics, on an accelerated track toward my BSME. My coursework spans fluid mechanics, machine design, mechanism analysis, and more — with a strong foundation in math and physics driving my approach to engineering problems.
+                    </p>
+                    <p>
+                        Before pursuing my degree full-time, I spent over three years as a CNC Machinist at Armstrong International, where I set up and operated Swiss lathes, CNC lathes, and CNC mills with integrated robotic arms. I reduced setup times by 70% through Six Sigma methodologies and consistently ran machines at 90%+ efficiency. That hands-on manufacturing experience gives me a perspective most engineering students don't have.
+                    </p>
+                    <p>
+                        I'm seeking mechanical engineering roles where I can combine my manufacturing knowledge with the analytical and design skills I'm building through my degree — contributing to teams that value both practical know-how and technical depth.
+                    </p>
+                </div>
+                <div class="about-stats reveal">
+                    <div class="stat-card">
+                        <div class="stat-number">BSME</div>
+                        <div class="stat-label">Western Michigan University</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">3.5+</div>
+                        <div class="stat-label">Years Manufacturing Experience</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">70%</div>
+                        <div class="stat-label">Setup Time Reduction</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">Math</div>
+                        <div class="stat-label">Minor</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <p class="section-label">Portfolio</p>
+                <h2 class="section-title">Featured Projects</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="projects-grid">
+
+                <!-- PROJECT 1 -->
+                <div class="project-card reveal">
+                    <div class="project-image">
+                        <!-- Replace with: <img src="your-image.jpg" alt="CNC Process Optimization"> -->
+                        <span class="project-placeholder">Project Image</span>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-tags">
+                            <span class="tag">Six Sigma</span>
+                            <span class="tag">CNC</span>
+                            <span class="tag">Process Improvement</span>
+                        </div>
+                        <h3 class="project-title">CNC Setup Time Optimization</h3>
+                        <p class="project-description">
+                            Applied Six Sigma methodologies to streamline CNC Swiss Lathe setup procedures at Armstrong International, achieving a 70% reduction in setup times while maintaining quality standards across multiple machine platforms.
+                        </p>
+                        <a href="#" class="project-link">
+                            View Details <span class="arrow">→</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PROJECT 2 -->
+                <div class="project-card reveal">
+                    <div class="project-image">
+                        <span class="project-placeholder">Project Image</span>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-tags">
+                            <span class="tag">Robotics</span>
+                            <span class="tag">CNC Mills</span>
+                            <span class="tag">Automation</span>
+                        </div>
+                        <h3 class="project-title">Robotic Arm CNC Mill Integration</h3>
+                        <p class="project-description">
+                            Operated and managed two Okuma Genos M460-VE CNC mills with integrated Fanuc M-710iC robotic arms, coordinating automated loading/unloading cycles to maximize throughput and minimize downtime.
+                        </p>
+                        <a href="#" class="project-link">
+                            View Details <span class="arrow">→</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PROJECT 3 -->
+                <div class="project-card reveal">
+                    <div class="project-image">
+                        <span class="project-placeholder">Project Image</span>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-tags">
+                            <span class="tag">Analysis</span>
+                            <span class="tag">Coursework</span>
+                        </div>
+                        <h3 class="project-title">Your Next Project Here</h3>
+                        <p class="project-description">
+                            Add your class projects or personal engineering work here — mechanism designs, fluid mechanics analysis, machine design projects, or anything else you want to showcase.
+                        </p>
+                        <a href="#" class="project-link">
+                            View Details <span class="arrow">→</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <p class="section-label">Capabilities</p>
+                <h2 class="section-title">Skills & Tools</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-category reveal">
+                    <div class="skill-icon">⚙️</div>
+                    <h3>Manufacturing</h3>
+                    <ul class="skill-list">
+                        <li>CNC Swiss Lathes & CNC Lathes</li>
+                        <li>CNC Mills with Robotic Arms</li>
+                        <li>Fanuc Controls</li>
+                        <li>G/M Code Programming</li>
+                        <li>3D Printing</li>
+                        <li>GD&T Specifications</li>
+                    </ul>
+                </div>
+                <div class="skill-category reveal">
+                    <div class="skill-icon">💻</div>
+                    <h3>Software</h3>
+                    <ul class="skill-list">
+                        <li>C Programming</li>
+                        <li>Python</li>
+                        <li>CNC Program Development</li>
+                        <li>Microsoft Office</li>
+                        <li>Blueprint Reading (Certified)</li>
+                    </ul>
+                </div>
+                <div class="skill-category reveal">
+                    <div class="skill-icon">📐</div>
+                    <h3>Engineering & Methods</h3>
+                    <ul class="skill-list">
+                        <li>Six Sigma</li>
+                        <li>Total Preventive Maintenance</li>
+                        <li>Quality Assurance</li>
+                        <li>Fluid Mechanics</li>
+                        <li>Machine Design</li>
+                        <li>Mechanism Analysis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+        <div class="section-container">
+            <div class="section-header reveal" style="text-align: center;">
+                <p class="section-label">Get In Touch</p>
+                <h2 class="section-title">Let's Connect</h2>
+                <div class="section-divider" style="margin: 1.25rem auto 0;"></div>
+            </div>
+            <div class="contact-content reveal">
+                <p>
+                    I'm currently seeking mechanical engineering opportunities where I can bring my analytical skills and hands-on experience to a team doing meaningful work. Feel free to reach out.
+                </p>
+                <div class="contact-links">
+                    <a href="mailto:noah.harrison831@gmail.com" class="contact-link">
+                        ✉ Email
+                    </a>
+                    <a href="https://linkedin.com/in/yourprofile" class="contact-link" target="_blank">
+                        💼 LinkedIn
+                    </a>
+                    <a href="https://github.com/nhh-engineer" class="contact-link" target="_blank">
+                        🖥 GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 Noah Harrison. Built with purpose.</p>
+    </footer>
+
+    <!-- SCROLL REVEAL -->
+    <script>
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        reveals.forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
