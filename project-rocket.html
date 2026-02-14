@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- STEP 1: Change the title below -->
+    <title>Arduino Rocket Data Logger | Noah Harrison</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111114;
+            --bg-card: #16161a;
+            --bg-card-hover: #1c1c21;
+            --border: #2a2a30;
+            --text-primary: #e8e8ec;
+            --text-secondary: #8a8a96;
+            --text-muted: #5a5a66;
+            --accent: #4a9eff;
+            --accent-glow: rgba(74, 158, 255, 0.15);
+            --accent-secondary: #64ffda;
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'DM Sans', system-ui, sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; }
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; background: rgba(10, 10, 11, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        .nav-logo { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; color: var(--text-primary); text-decoration: none; letter-spacing: -0.02em; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 400; transition: color 0.3s ease; letter-spacing: 0.02em; }
+        .nav-links a:hover { color: var(--accent); }
+        .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--accent); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: gap 0.3s ease, opacity 0.3s ease; margin-bottom: 2rem; }
+        .back-link:hover { gap: 0.75rem; opacity: 0.8; }
+        .back-link .arrow { transition: transform 0.3s ease; font-size: 1.1rem; }
+        .back-link:hover .arrow { transform: translateX(-3px); }
+        .project-hero { padding: 8rem 2rem 3rem; position: relative; }
+        .project-hero::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 700px; height: 500px; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); pointer-events: none; opacity: 0.4; }
+        .project-hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+        .project-hero .project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; animation: fadeInUp 0.6s ease both; }
+        .tag { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.3rem 0.7rem; border-radius: 100px; background: var(--accent-glow); color: var(--accent); border: 1px solid rgba(74, 158, 255, 0.15); }
+        .project-hero h1 { font-family: var(--font-display); font-size: clamp(2.25rem, 5vw, 3.5rem); font-weight: 600; line-height: 1.15; letter-spacing: -0.025em; margin-bottom: 1.25rem; animation: fadeInUp 0.6s ease 0.1s both; }
+        .project-hero-description { font-size: 1.15rem; color: var(--text-secondary); max-width: 700px; line-height: 1.8; animation: fadeInUp 0.6s ease 0.2s both; }
+        .project-hero-image { max-width: 1100px; margin: 2.5rem auto 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); background: var(--bg-secondary); animation: fadeInUp 0.6s ease 0.3s both; }
+        .project-hero-image img { width: 100%; height: auto; display: block; max-height: 550px; object-fit: cover; }
+        .project-hero-image .image-placeholder { width: 100%; height: 400px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.9rem; letter-spacing: 0.05em; flex-direction: column; gap: 0.5rem; }
+        .image-placeholder .placeholder-icon { font-size: 2rem; opacity: 0.5; }
+        .project-content { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
+        .content-section { margin-bottom: 4rem; }
+        .content-section:last-child { margin-bottom: 0; }
+        .content-label { font-size: 0.8rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
+        .content-title { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 600; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+        .content-divider { width: 50px; height: 2px; background: var(--accent); margin-bottom: 1.5rem; border-radius: 2px; }
+        .content-body p { font-size: 1.05rem; color: var(--text-secondary); line-height: 1.85; margin-bottom: 1.25rem; }
+        .content-body p:last-child { margin-bottom: 0; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem; margin-top: 1.5rem; }
+        .metric-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: all 0.3s ease; }
+        .metric-card:hover { border-color: rgba(74, 158, 255, 0.3); transform: translateY(-3px); }
+        .metric-value { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--accent); margin-bottom: 0.25rem; }
+        .metric-label { font-size: 0.85rem; color: var(--text-secondary); }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem; margin-top: 1.5rem; }
+        .gallery-item { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: var(--bg-card); transition: all 0.4s ease; cursor: pointer; }
+        .gallery-item:hover { border-color: rgba(74, 158, 255, 0.3); transform: translateY(-4px); box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4); }
+        .gallery-item img { width: 100%; height: 240px; object-fit: cover; display: block; transition: transform 0.4s ease; }
+        .gallery-item:hover img { transform: scale(1.03); }
+        .gallery-item .image-placeholder { width: 100%; height: 240px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.85rem; letter-spacing: 0.05em; flex-direction: column; gap: 0.5rem; }
+        .gallery-caption { padding: 1rem 1.25rem; font-size: 0.9rem; color: var(--text-secondary); border-top: 1px solid var(--border); }
+        .specs-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+        .specs-table tr { border-bottom: 1px solid var(--border); transition: background 0.2s ease; }
+        .specs-table tr:hover { background: var(--bg-card); }
+        .specs-table td { padding: 1rem 1.25rem; font-size: 0.95rem; }
+        .specs-table td:first-child { color: var(--text-muted); font-weight: 500; font-size: 0.85rem; letter-spacing: 0.03em; text-transform: uppercase; width: 200px; }
+        .specs-table td:last-child { color: var(--text-secondary); }
+        .lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 200; background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(10px); align-items: center; justify-content: center; cursor: zoom-out; animation: fadeIn 0.3s ease; }
+        .lightbox.active { display: flex; }
+        .lightbox img { max-width: 90%; max-height: 90vh; object-fit: contain; border-radius: 8px; box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6); }
+        .lightbox-close { position: absolute; top: 1.5rem; right: 2rem; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; transition: color 0.3s ease; background: none; border: none; font-family: var(--font-body); }
+        .lightbox-close:hover { color: var(--text-primary); }
+        .project-nav { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .project-nav a { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text-secondary); font-size: 0.9rem; transition: color 0.3s ease; }
+        .project-nav a:hover { color: var(--accent); }
+        .project-nav .nav-label { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem; }
+        .project-nav .nav-title { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; color: var(--text-primary); }
+        footer { padding: 2rem; text-align: center; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--text-muted); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.25rem; } .nav-links { gap: 1.25rem; } .nav-links a { font-size: 0.8rem; }
+            .project-hero { padding: 6rem 1.5rem 2rem; } .project-content { padding: 3rem 1.5rem; }
+            .gallery-grid { grid-template-columns: 1fr; } .metrics-grid { grid-template-columns: 1fr 1fr; }
+            .specs-table td:first-child { width: 130px; font-size: 0.8rem; }
+            .project-nav { flex-direction: column; gap: 1.5rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="nav-logo">NH</a>
+        <ul class="nav-links">
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#projects">Projects</a></li>
+            <li><a href="index.html#skills">Skills</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="project-hero">
+        <div class="project-hero-inner">
+            <a href="index.html#projects" class="back-link">
+                <span class="arrow">←</span> Back to Projects
+            </a>
+
+            <!-- STEP 2: Change your tags -->
+            <div class="project-tags">
+                <span class="tag">Arduino</span>
+                <span class="tag">3D Printing</span>
+                <span class="tag">Data Logging</span>
+                <span class="tag">Fusion 360</span>
+            </div>
+
+            <!-- STEP 3: Change your project title -->
+            <h1>Arduino Rocket Data Logger</h1>
+
+            <!-- STEP 4: Write a short description -->
+            <p class="project-hero-description">
+                Designed and built a custom electronics bay for a 3D-printed rocket featuring BMP280 and MPU6050 sensors to capture altitude and acceleration data during flight, with a perfboard-mounted Arduino logging system.
+            </p>
+        </div>
+
+        <!-- STEP 5: Add a hero image -->
+        <div class="project-hero-image">
+            <!-- Replace this div with: <img src="images/your-hero-image.jpg" alt="Project Name"> -->
+            <div class="image-placeholder">
+                <span class="placeholder-icon">📷</span>
+                Replace with your project hero image
+            </div>
+        </div>
+    </section>
+
+    <div class="project-content">
+
+        <!-- STEP 6: Write your project overview -->
+        <div class="content-section reveal">
+            <p class="content-label">Overview</p>
+            <h2 class="content-title">Project Summary</h2>
+            <div class="content-divider"></div>
+            <div class="content-body">
+                <p>Write your project overview here. Explain the problem, your approach, and the outcome.</p>
+                <p>Add more paragraphs as needed to tell the full story.</p>
+            </div>
+        </div>
+
+        <!-- STEP 7: Add your key metrics -->
+        <div class="content-section reveal">
+            <p class="content-label">Results</p>
+            <h2 class="content-title">Key Metrics</h2>
+            <div class="content-divider"></div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">XX%</div>
+                    <div class="metric-label">Metric Description</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">XX</div>
+                    <div class="metric-label">Metric Description</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">XX</div>
+                    <div class="metric-label">Metric Description</div>
+                </div>
+                <!-- Copy a metric-card block to add more -->
+            </div>
+        </div>
+
+        <!-- STEP 8: Add your images -->
+        <div class="content-section reveal">
+            <p class="content-label">Gallery</p>
+            <h2 class="content-title">Project Images</h2>
+            <div class="content-divider"></div>
+            <div class="gallery-grid">
+
+                <!-- Replace placeholder divs with: <img src="images/your-image.jpg" alt="Description"> -->
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <div class="image-placeholder">
+                        <span class="placeholder-icon">📷</span>
+                        Image 1
+                    </div>
+                    <div class="gallery-caption">Describe this image</div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <div class="image-placeholder">
+                        <span class="placeholder-icon">📷</span>
+                        Image 2
+                    </div>
+                    <div class="gallery-caption">Describe this image</div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <div class="image-placeholder">
+                        <span class="placeholder-icon">📷</span>
+                        Image 3
+                    </div>
+                    <div class="gallery-caption">Describe this image</div>
+                </div>
+
+                <!-- Copy a gallery-item block to add more images -->
+            </div>
+        </div>
+
+        <!-- STEP 9: Fill in your technical specs -->
+        <div class="content-section reveal">
+            <p class="content-label">Details</p>
+            <h2 class="content-title">Technical Specifications</h2>
+            <div class="content-divider"></div>
+            <table class="specs-table">
+                <tr>
+                    <td>Category</td>
+                    <td>Value</td>
+                </tr>
+                <tr>
+                    <td>Category</td>
+                    <td>Value</td>
+                </tr>
+                <tr>
+                    <td>Category</td>
+                    <td>Value</td>
+                </tr>
+                <!-- Copy a <tr> block to add more rows -->
+            </table>
+        </div>
+
+    </div>
+
+    <!-- STEP 10: Update the prev/next project links -->
+    <div class="project-nav">
+        <a href="index.html#projects">
+            <span class="arrow" style="font-size: 1.2rem;">←</span>
+            <div>
+                <div class="nav-label">Back to</div>
+                <div class="nav-title">All Projects</div>
+            </div>
+        </a>
+        <a href="index.html#projects">
+            <div style="text-align: right;">
+                <div class="nav-label">Next Project</div>
+                <div class="nav-title">Project Name</div>
+            </div>
+            <span class="arrow" style="font-size: 1.2rem;">→</span>
+        </a>
+    </div>
+
+    <footer>
+        <p>© 2026 Noah Harrison. Built with purpose.</p>
+    </footer>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+        <img id="lightbox-img" src="" alt="Enlarged view">
+    </div>
+
+    <script>
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+            });
+        }, { threshold: 0.15 });
+        reveals.forEach(el => observer.observe(el));
+        function openLightbox(item) {
+            const img = item.querySelector('img');
+            if (!img) return;
+            document.getElementById('lightbox-img').src = img.src;
+            document.getElementById('lightbox-img').alt = img.alt;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+    </script>
+
+</body>
+</html>
